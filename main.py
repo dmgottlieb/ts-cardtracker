@@ -14,6 +14,7 @@ App models deck management rules from the game -- reshuffles, adding Mid- and La
 """
 
 import readline
+import itertools
 
 def getCards(filename):
     
@@ -50,22 +51,70 @@ class DeckHandler(object):
     def doInput(self, input): 
         pass
 
-    def removeCard(self, card):
+    def discardCard(self, card):
 
         self.cards.remove(card)
+
         self.discard.append(card)
         self.discard.sort()
 
+    def removeCard(self,card):
+        self.cards.remove(card)
+        self.removed.append(card)
+        self.removed.sort()
+        
+
+
     def listCards(self):
 
-        return self.cards
+        return ['In deck\n'] + self.cards
+
+    def listDiscards(self):
+
+        return ['In discard\n'] + self.discard
+
+    def listRemoved(self):
+
+        return ['Removed from game\n'] + self.removed
+
+    def reshuffle(self):
+
+        self.cards = sorted(self.cards + self.discard)
+        self.discard = []
+
+    def addMidWar(self):
+
+        with open("mid-war.txt",'r') as f: 
+            midwar = [l.replace("\n","") for l in f.readlines()]
+            self.cards = sorted(self.cards + midwar)
+
+    def addLateWar(self):
+
+        with open("late-war.txt",'r') as f: 
+            midwar = [l.replace("\n","") for l in f.readlines()]
+            self.cards = sorted(self.cards + midwar)
+        
 
 def input_loop(dh):
     line = ''
     while True: 
-        print dh.listCards()
-        line = raw_input('Prompt') 
-        dh.removeCard(line)
+        print "\n\n\n"
+        for (a,b,c) in itertools.izip_longest(dh.listCards(),dh.listDiscards(),dh.listRemoved(),fillvalue=" "): 
+            # print '{0}\t\t\t\t{1}\t\t\t\t{2}'.format(a,b,c)
+            print '%-40s %-40s %s' % (a, b, c)
+        line = raw_input('>') 
+        if line.startswith("discard"):
+            pre, card = line.split(" ",1)
+            dh.discardCard(card)
+        if line.startswith("remove"):
+            pre, card = line.split(" ",1)
+            dh.removeCard(card)
+        if line.startswith("reshuffle"):
+            dh.reshuffle()
+        if line.startswith("midwar"):
+            dh.addMidWar()
+        if line.startswith("latewar"):
+            dh.addLateWar()
 
 
 
