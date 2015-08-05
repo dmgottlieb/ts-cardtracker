@@ -1,6 +1,9 @@
 # ts-cardtracker
 
 Simple command-line card tracker for Twilight Struggle. 
+Invoke using:
+
+> python main.py
 
 You are presented with an interactive prompt showing all cards remaining in the deck (or players' hands), all cards that have been discarded, and all cards that have been removed from the game. 
 
