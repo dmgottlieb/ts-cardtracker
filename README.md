@@ -19,3 +19,8 @@ Other commands:
 * `midwar`: add midwar cards 
 * `latewar`: add latewar cards
 * `reshuffle`: add discarded cards back to the deck.
+
+# To-do
+
+* Add error-handling
+* Add own-hand-tracking
